@@ -6,7 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// Create creates a user in the database
+// Create creates a pet in the database
 func Create(db *gorm.DB, user *User) (string, error) {
 	err := db.Create(user).Error
 	if err != nil {
@@ -15,7 +15,7 @@ func Create(db *gorm.DB, user *User) (string, error) {
 	return user.ID, nil
 }
 
-// FindById returns a user with a given id, or nil if not found
+// FindById returns a pet with a given id, or nil if not found
 func FindById(db *gorm.DB, id string) (*User, error) {
 	var user User
 	err := db.Find(&user, &User{ID: id}).Error
@@ -25,7 +25,7 @@ func FindById(db *gorm.DB, id string) (*User, error) {
 	return &user, nil
 }
 
-// FindByName returns a user with a given name, or nil if not found
+// FindByName returns a pet with a given name, or nil if not found
 func FindByName(db *gorm.DB, name string) (*User, error) {
 	var user User
 	err := db.Find(&user, &User{Name: name}).Error
@@ -35,7 +35,7 @@ func FindByName(db *gorm.DB, name string) (*User, error) {
 	return &user, nil
 }
 
-// List returns all Users in database, with a given limit
+// List returns all Pets in database, with a given limit
 func List(db *gorm.DB, limit uint) (*[]User, error) {
 	var users []User
 	err := db.Find(&users).Limit(limit).Error
@@ -45,7 +45,7 @@ func List(db *gorm.DB, limit uint) (*[]User, error) {
 	return &users, nil
 }
 
-// Delete deletes a user in the database
+// Delete deletes a pet in the database
 func Delete(db *gorm.DB, id string) error {
 	user, err := FindById(db, id)
 	if err != nil {
