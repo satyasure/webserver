@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os/user"
 	"strconv"
 
 	"github.com/gin-contrib/static"
@@ -42,7 +43,7 @@ func initializeRDSConn() {
 func validateRDS() {
 	//If the users table does not already exist, create it
 	if !db.HasTable("users") {
-		db.CreateTable(&user.user{})
+		db.CreateTable(&user.User{})
 	}
 }
 
@@ -114,7 +115,7 @@ func getUserHandler(c *gin.Context) {
 	id := c.Param("id")
 	req := users.GetUserRequest{ID: id}
 	res, _ := users.GetUser(db, &req)
-	if res.user == nil {
+	if res.User == nil {
 		c.JSON(http.StatusNotFound, res)
 		return
 	}
