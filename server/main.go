@@ -28,7 +28,7 @@ func initializeRDSConn() {
 	fmt.Printf("%s", string(dat))
 	m := make(map[string]string)
 	json.Unmarshal(dat, &m)
-	dbuser := m["dbuser"]     //admin
+	user := m["user"]         //admin
 	password := m["password"] //PJwuu-MbCsEXdU__
 	netloc := m["netloc"]     //my-cool-project-db-instance.cozpurlif6yt.us-west-2.rds.amazonaws.com:3306
 	database := m["database"] //users
