@@ -2,7 +2,7 @@ package users
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/scottwinkler/vanilla-webserver-src/server/model/user"
+	"github.com/satyasure/webserver/tree/master/server/model/user"
 )
 
 //ListUserRequest request struct
