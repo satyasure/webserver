@@ -1,6 +1,6 @@
 module github.com/satyasure/webserver/server
 
-go 1.20.3
+go 1.20
 
 require (
 	github.com/gin-contrib/static v0.0.1 // indirect
