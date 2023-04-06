@@ -27,7 +27,7 @@ func FindById(db *gorm.DB, id string) (*User, error) {
 
 // FindByName returns a user with a given name, or nil if not found
 func FindByName(db *gorm.DB, name string) (*User, error) {
-	var user user
+	var user User
 	err := db.Find(&user, &User{Name: name}).Error
 	if err != nil {
 		return nil, err
@@ -37,7 +37,7 @@ func FindByName(db *gorm.DB, name string) (*User, error) {
 
 // List returns all Users in database, with a given limit
 func List(db *gorm.DB, limit uint) (*[]User, error) {
-	var users []user
+	var users []User
 	err := db.Find(&users).Limit(limit).Error
 	if err != nil {
 		return nil, err
