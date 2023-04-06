@@ -1,6 +1,6 @@
 package user
 
-type user struct {
+type User struct {
 	ID       string `gorm:"primary_key" json:"id"`
 	Name     string `json:"name"`
 	Sex      string `json:"sex"`
