@@ -17,7 +17,7 @@ func Create(db *gorm.DB, user *user) (string, error) {
 
 // FindById returns a user with a given id, or nil if not found
 func FindById(db *gorm.DB, id string) (*user, error) {
-	var user user
+	var user User
 	err := db.Find(&user, &User{ID: id}).Error
 	if err != nil {
 		return nil, err
