@@ -3,7 +3,7 @@ package users
 import (
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
-	"github.com/satyasure/webserver/server/src/server/model/user"
+	"github.com/satyasure/webserver/server/model/user"
 )
 
 //CreateUserRequest request struct
