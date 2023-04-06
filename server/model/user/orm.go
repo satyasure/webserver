@@ -36,7 +36,7 @@ func FindByName(db *gorm.DB, name string) (*user, error) {
 }
 
 // List returns all Users in database, with a given limit
-func List(db *gorm.DB, limit uint) (*[]user, error) {
+func List(db *gorm.DB, limit uint) (*[]User, error) {
 	var users []user
 	err := db.Find(&users).Limit(limit).Error
 	if err != nil {
