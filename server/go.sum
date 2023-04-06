@@ -81,7 +81,9 @@ github.com/prometheus/common v0.2.0/go.mod h1:TNfzLD0ON7rHzMJeJkieUDPYmFC7Snx/y8
 github.com/prometheus/procfs v0.0.0-20181005140218-185b4288413d/go.mod h1:c3At6R/oaqEKCNdg8wHV1ftS6bRYblBhIjjI8uT2IGk=
 github.com/prometheus/procfs v0.0.0-20190117184657-bf6a532e95b1/go.mod h1:c3At6R/oaqEKCNdg8wHV1ftS6bRYblBhIjjI8uT2IGk=
 github.com/rcrowley/go-metrics v0.0.0-20181016184325-3113b8401b8a/go.mod h1:bCqnVzQkZxMG4s8nGwiZ5l3QUCyqpo9Y+/ZMZ9VjZe4=
+github.com/satyasure/webserver v0.0.0-20230406151606-8410a2bcc246 h1:Mrln5Rmq1Hr+PVoclr8rSpSom1PLIQJa86QeWamGD3w=
 github.com/scottwinkler/vanilla-webserver-src v0.1.1 h1:KK1mMLdLOpgCn1aYOQ5gl20QfT3kKGXn5dc0FQew//c=
+github.com/scottwinkler/vanilla-webserver-src/server v0.0.0-20190606053044-b9a3c39fc200 h1:rI0mC61DsM4pSz8F4wro/ZQfGcNnYoU2Unvx01H6o8Y=
 github.com/sirupsen/logrus v1.2.0/go.mod h1:LxeOpSwHxABJmUn/MG1IvRgCAasNZTLOkJPxbbu5VWo=
 github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=

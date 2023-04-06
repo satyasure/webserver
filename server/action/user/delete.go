@@ -2,7 +2,7 @@ package users
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/model/user"
+	"github.com/satyasure/webserver/tree/master/server/model/user"
 )
 
 //DeleteUserRequest request struct
