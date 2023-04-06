@@ -12,6 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"github.com/satyasure/webserver/server/action/users"
+	"github.com/satyasure/webserver/server/model/user"
 )
 
 var db *gorm.DB
