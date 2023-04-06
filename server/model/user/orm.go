@@ -7,7 +7,7 @@ import (
 )
 
 // Create creates a user in the database
-func Create(db *gorm.DB, user *user) (string, error) {
+func Create(db *gorm.DB, user *User) (string, error) {
 	err := db.Create(user).Error
 	if err != nil {
 		return "", err
