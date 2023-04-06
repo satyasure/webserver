@@ -6,7 +6,7 @@ import (
 	"github.com/satyasure/webserver/server/model/user"
 )
 
-//CreateUserRequest request struct
+// CreateUserRequest request struct
 type CreateUserRequest struct {
 	Name     string `json:"name" binding:"required"`
 	Sex      string `json:"sex"`
@@ -16,15 +16,15 @@ type CreateUserRequest struct {
 	ImageURL string `json:"imageURL"`
 }
 
-//CreateUserResponse response struct
+// CreateUserResponse response struct
 type CreateUserResponse struct {
 	ID string `json:"id"`
 }
 
-//CreateUser creates a user in database
+// CreateUser creates a user in database
 func CreateUser(db *gorm.DB, req *CreateUserRequest) (*CreateUserResponse, error) {
 	uuid, _ := uuid.NewRandom()
-	newUser := &user.user{
+	newUser := &user.User{
 		ID:       uuid.String(),
 		Name:     req.Name,
 		Sex:      req.Sex,
