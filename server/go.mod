@@ -1,4 +1,4 @@
-module github.com/satyasure/webserver/tree/master/server
+module https://github.com/satyasure/webserver/server
 
 go 1.15
 
