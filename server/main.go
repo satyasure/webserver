@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os/user"
 	"strconv"
 
 	"github.com/gin-contrib/static"
