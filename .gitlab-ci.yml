@@ -1,65 +1,86 @@
-image: golang:latest
-
-.go-cache:
-    variables:
-        GOPATH: $CI_PROJECT_DIR/.go
-    cache:
-      paths:
-        - .go/pkg/mod/
-
-variables:
-  OUTPUT_NAME: __bin__/$CI_PROJECT_NAME
-
+# Define the stages for the pipeline
 stages:
-  - lint
-  - test
   - build
-  - release
+  - test
+  - sonar
+  - publish
+  - docker
+  - deploy
 
-lint:
-    image: golangci/golangci-lint:latest
-    stage: lint
-    extends: .go-cache
-    allow_failure: false
-    script:
-      - golangci-lint run -v
-
-test:
-  stage: test
-  script:
-    - go fmt $(go list ./... | grep -v /vendor/)
-    - go vet $(go list ./... | grep -v /vendor/)
-    - go test -race $(go list ./... | grep -v /vendor/)
-
+# Define the job for building and testing the Go application
 build:
   stage: build
+  image: golang:1.16
   script:
-    - mkdir -p $OUTPUT_NAME
-    - go build -o $OUTPUT_NAME ./...
+    - go mod download
+    - go build -o myapp
   artifacts:
     paths:
-      - $OUTPUT_NAME
+      - myapp
 
-build_image:
-  image: docker:stable
-  stage: release
-  services:
-    - docker:dind
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+# Define the job for running tests
+test:
+  stage: test
+  image: golang:1.16
   script:
-    - |
-      if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
-        tag=""
-        echo "Running on default branch '$CI_DEFAULT_BRANCH': tag = 'latest'"
-      else
-        tag=":$CI_COMMIT_REF_SLUG"
-        echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
-      fi
-    - docker build --pull -t "$CI_REGISTRY_IMAGE${tag}" .
-    - docker push "$CI_REGISTRY_IMAGE${tag}"
-  rules:
-    - if: $CI_COMMIT_BRANCH
-      exists:
-        - Dockerfile
+    - go mod download
+    - go test ./...
 
+# Define the job for scanning the code with SonarQube
+sonar:
+  stage: sonar
+  image: sonarsource/sonar-scanner-cli:latest
+  variables:
+    SONAR_TOKEN: ${SONAR_TOKEN}
+    SONAR_HOST_URL: ${SONAR_HOST_URL}
+  script:
+    - sonar-scanner
+
+# Define the job for publishing the code coverage report to SonarQube
+publish:
+  stage: publish
+  image: golang:1.16
+  script:
+    - go get github.com/axw/gocov/gocov
+    - go get github.com/AlekSi/gocov-xml
+    - go test ./... -coverprofile=coverage.out
+    - gocov convert coverage.out | gocov-xml > coverage.xml
+    - curl -X POST -u ${SONAR_TOKEN}: ${SONAR_HOST_URL}/api/qualitygates/project_status?projectKey=${CI_PROJECT_PATH}&branch=${CI_COMMIT_REF_NAME}&status=passed
+
+# Define the job for building and uploading the application binary to Artifactory
+upload:
+  stage: publish
+  image: golang:1.16
+  script:
+    - export VERSION=$(git describe --tags --abbrev=0)
+    - GOOS=linux GOARCH=amd64 go build -o myapp-$VERSION cmd/myapp/main.go
+    - |
+      jfrog rt config --interactive=false --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASSWORD
+      jfrog rt upload myapp-$VERSION $ARTIFACTORY_REPO/golang/myapp/$VERSION/
+  artifacts:
+    paths:
+      - myapp
+
+# Define the job for building a Docker image and pushing it to Artifactory
+docker:
+  stage: docker
+  image:
+    name: docker:latest
+    entrypoint: [""]
+  services:
+    - name: docker:dind
+      alias: docker
+  script:
+    - export VERSION=$(git describe --tags --abbrev=0)
+    - docker build -t $ARTIFACTORY_URL/$ARTIFACTORY_REPO/docker/myapp:$VERSION .
+    - docker login -u $ARTIFACTORY_USER -p $ARTIFACTORY_PASSWORD $ARTIFACTORY_URL
+    - docker push $ARTIFACTORY_URL/$ARTIFACTORY_REPO/docker/myapp:$VERSION
+# Define the job for building a Helm chart and deploying it to a Kubernetes cluster
+deploy:
+  stage: deploy
+  image: alpine/helm:3.7.0
+  script:
+    - helm repo add stable https://charts.helm.sh/stable
+    - helm dependency update
+    - helm package .
+    - helm upgrade --install myapp ./myapp-*.tgz
