@@ -1,0 +1,67 @@
+name: Go Web App CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16
+      - name: Install SonarQube Scanner
+        run: |
+          wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+          unzip sonar-scanner-cli-4.6.2.2472-linux.zip
+      - name: Build and test
+        run: |
+          go test ./...
+          go build -o myapp cmd/myapp/main.go
+      - name: SonarQube scan
+        run: |
+          export SONAR_HOST_URL=https://your-sonarqube-instance.com
+          export SONAR_LOGIN=<sonar_token>
+          ./sonar-scanner-cli-4.6.2.2472-linux/bin/sonar-scanner -Dsonar.projectKey=<project_key> -Dsonar.projectName=<project_name> -Dsonar.sources=. -Dsonar.exclusions=vendor/**
+      - name: Upload binary to Artifactory
+        env:
+          ARTIFACTORY_URL: <artifactory_url>
+          ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
+          ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+          ARTIFACTORY_REPO: <artifactory_repo>
+        run: |
+          export VERSION=$(git describe --tags --abbrev=0)
+          curl -u$ARTIFACTORY_USER:$ARTIFACTORY_PASSWORD -T myapp $ARTIFACTORY_URL/artifactory/$ARTIFACTORY_REPO/golang/myapp/$VERSION/
+      - name: Build and push Docker image
+        env:
+          ARTIFACTORY_URL: <artifactory_url>
+          ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
+          ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+          ARTIFACTORY_REPO: <artifactory_repo>
+        run: |
+          export VERSION=$(git describe --tags --abbrev=0)
+          docker build -t $ARTIFACTORY_URL/$ARTIFACTORY_REPO/docker/myapp:$VERSION .
+          docker login -u $ARTIFACTORY_USER -p $ARTIFACTORY_PASSWORD $ARTIFACTORY_URL
+          docker push $ARTIFACTORY_URL/$ARTIFACTORY_REPO/docker/myapp:$VERSION
+      - name: Deploy to Kubernetes
+        uses: appleboy/kubectl-action@v0.2.0
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+          ARTIFACTORY_URL: <artifactory_url>
+          ARTIFACTORY_USER: ${{ secrets.ARTIFACTORY_USER }}
+          ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+          ARTIFACTORY_REPO: <artifactory_repo>
+          IMAGE_TAG: ${{ github.ref }}
+        with:
+          args: |
+            helm upgrade --install myapp $ARTIFACTORY_URL/$ARTIFACTORY_REPO/helm/myapp \
+              --set image.repository=$ARTIFACTORY_URL/$ARTIFACTORY_REPO/docker/myapp \
+              --set image.tag=$IMAGE_TAG \
+              --set service.port=80 \
+              --kubeconfig=${{ secrets.KUBE_CONFIG_DATA }} \
+              --namespace=default
