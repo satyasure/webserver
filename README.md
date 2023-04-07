@@ -1,2 +1,14 @@
-# Webserver
-This is the source code for the webserver use in chapters 3 and 4 of "Terraform in Action"
+<h1 align="center">Hi 👋, I'am Satyanarayana Sure</h1>
+<h3 align="center">A DevOps enthusiast from Singapore</h3>
+
+- 🔭 I’m currently working on [DevOps Project using git, github, AWS, linux, Jenkins, SonarQube, Trivy, Ansible ,terraform,and Docker,k8s](https://github.com/praveensirvi1212/DevSecOps-project)
+
+- 🌱 I’m Working as SME and Technical Lead of  **DevOps**
+
+- 💻[Portfolio](https://gitlab.com/uploads/-/system/user/avatar/5442884/avatar.png)
+
+- 📝 I regularly write articles on Medium [https://medium.com/@satyanarayana.sure](https://medium.com/@satyanarayana.sure)
+
+- 💬 Ask me about **git,github,Linux,aws,SonarQube,docker,jenkins,kubernetes**
+
+- 📫 How to reach me **satyanarayana.sure@gmail.com**
