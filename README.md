@@ -5,7 +5,7 @@
 
 - 🌱 I’m Working as SME and Technical Lead of  **DevOps**
 
-- 👨‍💻 Portfolio [gitlab](https://gitlab.com/uploads/-/system/user/avatar/5442884/avatar.png?width=400)
+- 💻[Portfolio](https://gitlab.com/uploads/-/system/user/avatar/5442884/avatar.png)
 
 - 📝 I regularly write articles on Medium [https://medium.com/@satyanarayana.sure](https://medium.com/@satyanarayana.sure)
 
