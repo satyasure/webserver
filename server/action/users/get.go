@@ -18,6 +18,6 @@ type GetUserResponse struct {
 // GetUser returns a user from database
 func GetUser(db *gorm.DB, req *GetUserRequest) (*GetUserResponse, error) {
 	user, err := user.FindById(db, req.ID)
-	res := &GetUserResponse{user: user}
+	res := &GetUserResponse{User: user}
 	return res, err
 }
