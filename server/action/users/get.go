@@ -12,7 +12,7 @@ type GetUserRequest struct {
 
 // GetUserResponse response struct
 type GetUserResponse struct {
-	user *user.User `json:"user"`
+	User *user.User `json:"user"`
 }
 
 // GetUser returns a user from database
