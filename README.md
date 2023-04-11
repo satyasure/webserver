@@ -12,3 +12,13 @@
 - 💬 Ask me about **git,github,Linux,aws,SonarQube,docker,jenkins,kubernetes**
 
 - 📫 How to reach me **satyanarayana.sure@gmail.com**
+
+
+
+curl -L -o download.zip https://api.github.com/repos/satyasure/webserver/zipball/master
+
+
+
+curl -L -o download.zip $(curl -s https://api.github.com/repos/satyasure/webserver/releases/latest | grep "browser_download_url.*zip" | cut -d : -f 2,3 | tr -d \")
+
+curl -L -o download.tar.gz $(curl -s https://api.github.com/repos/satyasure/webserver/releases/latest | grep "browser_download_url.*tar.gz" | cut -d : -f 2,3 | tr -d \")
